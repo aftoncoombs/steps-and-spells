@@ -1,0 +1,5 @@
+"0","attendance_data <- "
+"0","  read.csv(""data/CR Attendance.csv"","
+"0","           stringsAsFactors = FALSE)"
+"0",""
+"0","head(attendance_data)  "

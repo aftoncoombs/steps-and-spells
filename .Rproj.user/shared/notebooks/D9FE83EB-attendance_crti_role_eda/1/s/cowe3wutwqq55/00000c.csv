@@ -1,0 +1,8 @@
+"0","colors <- structure(c(""black"", ""green""), names = c(""0"", ""1""))"
+"0","Heatmap(as.matrix(attendance_data[ , 3:9]),"
+"0","        col = colors,"
+"0","        name = ""Critical Role Attendance"","
+"0","        column_title = ""Actor"","
+"0","        column_title_side = ""bottom"", "
+"0","        cluster_rows = FALSE,"
+"0","        column_dend_side = ""bottom"")"

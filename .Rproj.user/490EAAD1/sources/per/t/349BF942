@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1588697985677.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3233543737",
+    "id" : "349BF942",
+    "lastKnownWriteTime" : 1590255658,
+    "last_content_update" : 1590255658284,
+    "path" : "~/Projects/steps-and-spells2/config.toml",
+    "project_path" : "config.toml",
+    "properties" : {
+        "cursorPosition" : "46,14",
+        "scrollLine" : "32"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "toml"
+}

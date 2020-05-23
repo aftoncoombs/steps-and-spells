@@ -1,0 +1,17 @@
+"0","kiri_data <-
+  kiri_data %>%
+  dplyr::mutate(Imitated = str_match(Kiri, ""like .*\\)"")) %>%
+  dplyr::mutate(Imitated = str_replace(Imitated, ""like "", """")) %>%
+  dplyr::mutate(Imitated = str_replace(Imitated, ""\\)"", """")) %>%
+  dplyr::mutate(Speech = str_match(Kiri, ""[[:alpha:]]\\) .*[[:punct:]]$"")) %>%
+  dplyr::mutate(Speech = str_replace(Speech, ""[[:alpha:]]\\) "", """")) %>%
+  dplyr::mutate(Words = tolower(Speech)) %>%
+  dplyr::mutate(Words = str_replace(Words, ""f\\*\\*"", ""fuck"")) %>%
+  dplyr::mutate(Words = str_replace(Words, ""[[:punct:]]"", """")) %>%
+  dplyr::mutate(Words = str_replace(Words, ""\\."", """")) %>%
+  dplyr::mutate(Words = str_replace(Words, ""fuck"", ""f***"")) %>%
+  dplyr::mutate(Number = seq(1:nrow(kiri_data)))
+"
+"2","Error in str_match(Kiri, ""like .*\\)"") : 
+  could not find function ""str_match""
+"

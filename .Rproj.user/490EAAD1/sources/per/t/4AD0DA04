@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1590190578443.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3366274315",
+    "id" : "4AD0DA04",
+    "lastKnownWriteTime" : 1590256785,
+    "last_content_update" : 1590256785291,
+    "path" : "~/Projects/steps-and-spells2/content/spellbook/2020-05-22-critical-role-series-attendance.Rmd",
+    "project_path" : "content/spellbook/2020-05-22-critical-role-series-attendance.Rmd",
+    "properties" : {
+        "cursorPosition" : "195,42",
+        "last_setup_crc32" : "CA6DC35D2a4d8b60",
+        "scrollLine" : "189"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

@@ -1,0 +1,13 @@
+"0","g1 <- 
+  ggplot2::ggplot(data = attendance_data_long %>%
+                        dplyr::filter(Actor == ""Travis""),
+                               aes(x = Episode.Num,
+                                   y = Actor,
+                                   fill = factor(value))) +
+  ggplot2::geom_tile() +
+  scale_color_manual(values = as.character(mighty_nein_dark_to_light$Travis),
+                     aesthetics = c(""colour"", ""fill""))
+"
+"2","Error in eval(lhs, parent, parent) : 
+  object 'attendance_data_long' not found
+"

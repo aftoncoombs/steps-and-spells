@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1590187047049.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1731405778",
+    "id" : "A0695278",
+    "lastKnownWriteTime" : 1590187204,
+    "last_content_update" : 1590187204681,
+    "path" : "~/Projects/steps-and-spells2/content/spellbook/utils/m9_discrete_colors.R",
+    "project_path" : "content/spellbook/utils/m9_discrete_colors.R",
+    "properties" : {
+        "cursorPosition" : "93,9",
+        "scrollLine" : "86"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

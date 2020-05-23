@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>R on Steps &amp; Spells</title>
+    <link>/categories/r/</link>
+    <description>Recent content in R on Steps &amp; Spells</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 22 May 2020 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/categories/r/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Critical Role Series: Attendance</title>
+      <link>/spellbook/critical-role-series-attendance/</link>
+      <pubDate>Fri, 22 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/spellbook/critical-role-series-attendance/</guid>
+      <description>Spell Ingredients This spell is written in the R language, and requires:
+ magrittr dplyr tidyr tibble ggplot2 ggthemes   Introduction This is a short exploratory data analysis of attendance on the web series Critical Role, in which voice actors play Dungeons and Dragoooooooons! It is a fantastic show, and some of the amazing people at Crit Role Stats have been tracking “monster stats, dice rolls, and anything else that can be quantified on Critical Role”.</description>
+    </item>
+    
+  </channel>
+</rss>

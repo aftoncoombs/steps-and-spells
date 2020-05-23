@@ -1,0 +1,12 @@
+"0","spells_sum <-
+  j_spells_sum %>%
+  dplyr::mutate(character = ""Jester"") %>%
+  dplyr::full_join(c_spells_sum %>%
+                     dplyr::mutate(character = ""Caduceus"")) %>%
+  dplyr::group_by(character) %>%
+  dplyr::mutate(Prop = Num / sum(Num)) %>%
+  dplyr::mutate(class = paste0(character, ""_"", Type)) %>%
+  dplyr::mutate(text_color = rep(1))
+"
+"2","Joining, by = c(""Type"", ""Num"", ""character"")
+"
