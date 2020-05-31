@@ -1,5 +1,0 @@
-"0","head(attendance_data_long_with_factor)
-"
-"2","Error in head(attendance_data_long_with_factor) : 
-  object 'attendance_data_long_with_factor' not found
-"
