@@ -6,10 +6,21 @@
     <description>Recent content in analysis on Steps &amp; Spells</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 22 May 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 24 May 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/analysis/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Critical Role Series: Kiri Imitations</title>
+      <link>/spellbook/critical-role-series-kiri-imitations/</link>
+      <pubDate>Sun, 24 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/spellbook/critical-role-series-kiri-imitations/</guid>
+      <description>Ingredients This spell is made in the R language, and requires these packages:
+ magrittr dplyr stringr ggplot2   Introduction This is part of a just-for-fun series using data on the Dungeons and Dragons streaming show, Critical Role. The amazing people at Crit Role Stats have logged and analyzed data about various aspects of the show, from dice rolls to character stats to in-game puns.
+The show is on hiatus due to COVID-19 so in the usual timeslot when I would have been watching Critical Role, I’ve been having some fun visualizing some of the data tracked by Crit Role Stats.</description>
+    </item>
     
     <item>
       <title>Critical Role Series: Attendance</title>
