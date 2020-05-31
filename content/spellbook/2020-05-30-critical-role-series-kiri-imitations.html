@@ -1,0 +1,160 @@
+---
+title: 'Critical Role Series: Kiri Imitations'
+author: Afton Coombs
+date: '2020-05-24'
+slug: critical-role-series-kiri-imitations
+categories:
+  - R
+  - analysis
+  - data visualization
+tags:
+  - Critical Role
+---
+
+
+
+<div id="ingredients" class="section level2">
+<h2>Ingredients</h2>
+<p>This spell is made in the <code>R</code> language, and requires these packages:</p>
+<ul>
+<li><code>magrittr</code></li>
+<li><code>dplyr</code></li>
+<li><code>stringr</code></li>
+<li><code>ggplot2</code></li>
+</ul>
+</div>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>This is part of a just-for-fun series using data on the Dungeons and Dragons streaming show,
+<a href = "https://critrole.com/">Critical Role</a>. The amazing people at <a href = "https://www.critrolestats.com/">Crit Role Stats</a> have logged and analyzed
+data about various aspects of the show, from dice rolls to character stats to in-game puns.</p>
+<p>The show is on hiatus due to COVID-19 so in the usual timeslot when I would have been watching Critical Role,
+I’ve been having some fun visualizing some of the data tracked by Crit Role Stats.</p>
+<p>This time, I wanted to visualize the imitations of humans made the bird girl Kiri.</p>
+</div>
+<div id="background" class="section level2">
+<h2>Background</h2>
+<p>Kiri is a little bird person who parrots the speech of people around her. The adventurers in this story, the Mighty Nein, found Kiri orphaned and alone, and took care of her until they could find a real family for her. I wanted to visualize her imitations of each member of the M9 over time.</p>
+</div>
+<div id="the-data" class="section level2">
+<h2>The Data</h2>
+<p>The dataset comes from a page on <a href = "https://www.critrolestats.com/kiri-imitations">Crit Role Stats</a>
+which I pasted into a .csv file (this is not the most reproducible way to do the data sourcing, but I wanted
+a static dataset in case updates were made, so apologies).</p>
+<p>As we can see, the dataset has, per row, the timestamp in the episode, the person imitated, and the
+imitated speech. For background information – the rows are in chronological order.</p>
+<pre class="r"><code>kiri_data &lt;- read.csv(&quot;data/Kiri Imitations.csv&quot;,
+                      stringsAsFactors = FALSE)
+head(kiri_data)</code></pre>
+<pre><code>##                                               Kiri
+## 1 (2:17:53) (like Jester) Do you live around here?
+## 2                   (2:18:14) (like Jester) A kid.
+## 3                (2:19:03) (like Caleb) Please no.
+## 4                (2:25:34) (like Jester) I’m okay.
+## 5               (2:25:48) (like Fjord) It’s sharp.
+## 6                 (2:35:04) (like Caleb) Sidekick.</code></pre>
+<p>We can use regular expressions to pull apart that row into variables for the person imitated and the imitated
+speech. I also filtered out imitated that were not of the Mighty Nein, lowercased the speech, and added a sequence identifier to make it easier to plot the phrases in order, once we get to that.</p>
+<pre class="r"><code>kiri_data_m9 &lt;-
+  kiri_data %&gt;%
+  dplyr::mutate(imitated = stringr::str_match(Kiri, &quot;like .*\\)&quot;)) %&gt;%
+  dplyr::mutate(imitated = stringr::str_replace(imitated, &quot;like &quot;, &quot;&quot;)) %&gt;%
+  dplyr::mutate(imitated = stringr::str_replace(imitated, &quot;\\)&quot;, &quot;&quot;)) %&gt;%
+  dplyr::mutate(Speech = stringr::str_match(Kiri, &quot;[[:alpha:]]\\) .*[[:punct:]]$&quot;)) %&gt;%
+  dplyr::mutate(Speech = stringr::str_replace(Speech, &quot;[[:alpha:]]\\) &quot;, &quot;&quot;)) %&gt;%
+  dplyr::mutate(Speech = tolower(Speech)) %&gt;%
+  dplyr::filter(imitated %in% c(&quot;Beau&quot;,
+                                &quot;Caleb&quot;,
+                                &quot;Fjord&quot;,
+                                &quot;Jester&quot;,
+                                &quot;Molly&quot;,
+                                &quot;Nott&quot;,
+                                &quot;Yasha&quot;))
+
+kiri_data_m9 &lt;-
+  kiri_data_m9 %&gt;%
+  dplyr::mutate(Number = seq(1:nrow(kiri_data_m9)))
+
+head(kiri_data_m9)</code></pre>
+<pre><code>##                                               Kiri imitated
+## 1 (2:17:53) (like Jester) Do you live around here?   Jester
+## 2                   (2:18:14) (like Jester) A kid.   Jester
+## 3                (2:19:03) (like Caleb) Please no.    Caleb
+## 4                (2:25:34) (like Jester) I’m okay.   Jester
+## 5               (2:25:48) (like Fjord) It’s sharp.    Fjord
+## 6                 (2:35:04) (like Caleb) Sidekick.    Caleb
+##                     Speech Number
+## 1 do you live around here?      1
+## 2                   a kid.      2
+## 3               please no.      3
+## 4                i’m okay.      4
+## 5              it’s sharp.      5
+## 6                sidekick.      6</code></pre>
+</div>
+<div id="plotting" class="section level2">
+<h2>Plotting</h2>
+<p>First, I picked out the hex codes for some colors that I wanted to use to code each of the lines. Each character only requires one color. In a <a href = "https://www.stepsandspells.com/spellbook/critical-role-series-attendance/">previous post</a>, I set out hex codes for a light and dark color option
+for each character, but here I’ll only use the darker color. I also use the names of the characters as the
+color names, rather than the actor names, because that’s how the Kiri data is coded.</p>
+<pre class="r"><code>single_mighty_nein_colors &lt;-
+  c(&quot;Fjord&quot; = as.character(&quot;#78a05a&quot;),
+    &quot;Beau&quot; = as.character(&quot;#072d7f&quot;),
+    &quot;Caleb&quot; = as.character(&quot;#b36817&quot;),
+    &quot;Nott&quot; = as.character(&quot;#525530&quot;),
+    &quot;Jester&quot; = as.character(&quot;#5882b8&quot;),
+    &quot;Molly&quot; = as.character(&quot;#5b417d&quot;),
+    &quot;Yasha&quot; = as.character(&quot;#535154&quot;))
+
+single_mighty_nein_colors</code></pre>
+<pre><code>##     Fjord      Beau     Caleb      Nott    Jester     Molly     Yasha 
+## &quot;#78a05a&quot; &quot;#072d7f&quot; &quot;#b36817&quot; &quot;#525530&quot; &quot;#5882b8&quot; &quot;#5b417d&quot; &quot;#535154&quot;</code></pre>
+<p>Now we’re ready to plot. This is similar to a timeline plot, with a horizontal line represeting time
+progressing, and the vertical text representing the speech at that time. <code>geom_hline()</code> will create
+a horizonal line to anchor the data points to, but making it white will render it invisible so long
+as the plot background is also white. <code>geom_point()</code> will add the color coded dots along the graph,
+and <code>geom_text()</code> will add the imitated speech itself. I also did a few finicky things with the spacing around the plot by using <code>coord_cartesian()</code> to set the plot limits, and with the plot theme and font choice.</p>
+<pre class="r"><code>ggplot2::ggplot(data = kiri_data_m9,
+                ggplot2::aes(x = Number, y = 0, color = imitated, label = Speech)) +
+  ggplot2::geom_hline(yintercept = 0,
+                      color = &quot;white&quot;,
+                      size = 0.3) +
+  ggplot2::geom_point(ggplot2::aes(x = Number, color = imitated)) +
+  ggplot2::geom_text(ggplot2::aes(x = Number, 
+                                  y = 0.1, 
+                                  label = Speech, 
+                                  angle = 90, 
+                                  hjust = 0), 
+                     size = 2, 
+                     family = &quot;Courier&quot;) +
+  ggplot2::coord_cartesian(ylim = c(-0.5, 8)) +
+  ggplot2::scale_color_manual(values = single_mighty_nein_colors) +
+  ggplot2::theme_void() +
+  ggplot2::theme(legend.position = &quot;bottom&quot;) +
+  ggplot2::theme(axis.title.x = ggplot2::element_blank(),
+                 axis.text.x = ggplot2::element_blank(),
+                 axis.ticks.x = ggplot2::element_blank(),
+                 text = ggplot2::element_text(family=&quot;Courier&quot;)) +
+  ggplot2::labs(col = &quot;Kiri &amp; The M9: Imitations      &quot;) </code></pre>
+<p><img src="/spellbook/2020-05-30-critical-role-series-kiri-imitations_files/figure-html/plot-1.png" width="672" /></p>
+<p>So what can we learn from this?</p>
+<p>Right away, it looks like most the the imitations are of Jester. That makes sense
+because, Jester loved the bird girl Kiri and spent a lot of time trying to teach her new phrases.</p>
+<p>What about Yasha? Very few imitations are of Yasha, which also makes some sense given that Ashley (Yasha) had to be away periodically for another show, and so her character was gracefully written out of certain episodes.</p>
+<p>And then there’s Beau. Beau is characteristically awkward and socially inappropriate, and it looks like her three imitations are “ooh, I’m a captain”, “where do babies come from?”, and &quot;f***!&quot;.</p>
+<p>One aspect pointed out to me by <span class="citation">@Lauri_Torni</span> on Twitter is that Molly died not long after this portion of the story, and his only imitation is, heart breakingly, “Take care of them.”</p>
+<blockquote class="twitter-tweet">
+<p lang="en" dir="ltr">
+I like how the only imitation of Molly is, “Take care of them.” I never realized that
+</p>
+— GermanWehrmacht (<span class="citation">@Lauri_Torni</span>) <a href="https://twitter.com/Lauri_Torni/status/1243424603067674624?ref_src=twsrc%5Etfw">March 27, 2020</a>
+</blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet">
+<p lang="en" dir="ltr">
+Imagine if they go see kiri again and she mimics Molly, how sad would everyone be to hear him again after months of travel.
+</p>
+— Dasai.toki (<span class="citation">@Dasai_toki</span>) <a href="https://twitter.com/Dasai_toki/status/1243577755276582912?ref_src=twsrc%5Etfw">March 27, 2020</a>
+</blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<p>Molly’s death was a turning point in the campaign, and traumatic for the characters. It’s entirely possible that the M9 will go back to see Kiri again some day, and that she will imitate in Molly’s voice “Take care of them.”</p>
+</div>
