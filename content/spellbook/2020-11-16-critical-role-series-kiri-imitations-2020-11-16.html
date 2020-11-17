@@ -1,8 +1,8 @@
 ---
-title: 'Critical Role Series: Kiri Imitations (Old)'
+title: 'Critical Role Series: Kiri Imitations'
 author: Afton Coombs
-date: '2020-05-24'
-slug: critical-role-series-kiri-imitations
+date: '2020-11-16'
+slug: critical-role-series-kiri-imitations-2020-11-16
 categories:
   - R
   - analysis
@@ -13,10 +13,6 @@ tags:
 
 
 
-<div id="update" class="section level2">
-<h2>UPDATE</h2>
-<p>Please find an updated version of this post <a href = "/spellbook/critical-role-series-kiri-imitations-2020-11-16/">here</a>. When I first made these graphs, I was still early in the storyline of campaign 2. Some aspects of the graphs have now been updated to use characters’ true names.</p>
-</div>
 <div id="ingredients" class="section level2">
 <h2>Ingredients</h2>
 <p>This spell is made in the <code>R</code> language, and requires these packages:</p>
@@ -47,7 +43,7 @@ which I pasted into a .csv file (this is not the most reproducible way to do the
 a static dataset in case updates were made, so apologies).</p>
 <p>As we can see, the dataset has, per row, the timestamp in the episode, the person imitated, and the
 imitated speech. For background information – the rows are in chronological order.</p>
-<pre class="r"><code>kiri_data &lt;- read.csv(&quot;data/Kiri Imitations.csv&quot;,
+<pre class="r"><code>kiri_data &lt;- read.csv(&quot;data/Kiri Imitations 2020-11-16.csv&quot;,
                       stringsAsFactors = FALSE)
 head(kiri_data)</code></pre>
 <pre><code>##                                               Kiri
@@ -72,7 +68,7 @@ speech. I also filtered out imitated that were not of the Mighty Nein, lowercase
                                 &quot;Fjord&quot;,
                                 &quot;Jester&quot;,
                                 &quot;Molly&quot;,
-                                &quot;Nott&quot;,
+                                &quot;Veth&quot;,
                                 &quot;Yasha&quot;))
 
 kiri_data_m9 &lt;-
@@ -104,14 +100,14 @@ color names, rather than the actor names, because that’s how the Kiri data is 
   c(&quot;Fjord&quot; = as.character(&quot;#78a05a&quot;),
     &quot;Beau&quot; = as.character(&quot;#072d7f&quot;),
     &quot;Caleb&quot; = as.character(&quot;#b36817&quot;),
-    &quot;Nott&quot; = as.character(&quot;#525530&quot;),
+    &quot;Veth&quot; = as.character(&quot;#c4a42f&quot;),
     &quot;Jester&quot; = as.character(&quot;#5882b8&quot;),
     &quot;Molly&quot; = as.character(&quot;#5b417d&quot;),
     &quot;Yasha&quot; = as.character(&quot;#535154&quot;))
 
 single_mighty_nein_colors</code></pre>
-<pre><code>##     Fjord      Beau     Caleb      Nott    Jester     Molly     Yasha 
-## &quot;#78a05a&quot; &quot;#072d7f&quot; &quot;#b36817&quot; &quot;#525530&quot; &quot;#5882b8&quot; &quot;#5b417d&quot; &quot;#535154&quot;</code></pre>
+<pre><code>##     Fjord      Beau     Caleb      Veth    Jester     Molly     Yasha 
+## &quot;#78a05a&quot; &quot;#072d7f&quot; &quot;#b36817&quot; &quot;#c4a42f&quot; &quot;#5882b8&quot; &quot;#5b417d&quot; &quot;#535154&quot;</code></pre>
 <p>Now we’re ready to plot. This is similar to a timeline plot, with a horizontal line represeting time
 progressing, and the vertical text representing the speech at that time. <code>geom_hline()</code> will create
 a horizonal line to anchor the data points to, but making it white will render it invisible so long
@@ -139,7 +135,7 @@ and <code>geom_text()</code> will add the imitated speech itself. I also did a f
                  axis.ticks.x = ggplot2::element_blank(),
                  text = ggplot2::element_text(family=&quot;Courier&quot;)) +
   ggplot2::labs(col = &quot;Kiri &amp; The M9: Imitations      &quot;) </code></pre>
-<p><img src="/spellbook/2020-05-30-critical-role-series-kiri-imitations_files/figure-html/plot-1.png" width="672" /></p>
+<p><img src="/spellbook/2020-11-16-critical-role-series-kiri-imitations-2020-11-16_files/figure-html/plot-1.png" width="672" /></p>
 <p>So what can we learn from this?</p>
 <p>Right away, it looks like most the the imitations are of Jester. That makes sense
 because, Jester loved the bird girl Kiri and spent a lot of time trying to teach her new phrases.</p>

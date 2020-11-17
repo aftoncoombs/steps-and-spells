@@ -3,8 +3,8 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Critical Role Series: Attendance (Old)</title>
-        <link rel="canonical" href="/spellbook/critical-role-series-attendance/">
+        <title>Critical Role Series: Attendance</title>
+        <link rel="canonical" href="/spellbook/critical-role-series-attendance-2020-11-16/">
         <style>
 
     html body {
@@ -132,7 +132,7 @@ $(document).ready(function(){
     
     
     
-    <meta property="og:title" content="Critical Role Series: Attendance (Old)">
+    <meta property="og:title" content="Critical Role Series: Attendance">
     <meta property="og:type" content="article">
       
       <meta name="twitter:card" content="summary">
@@ -157,7 +157,7 @@ $(document).ready(function(){
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
-                    <a class="navbar-brand visible-xs" id = "title" href="#">Critical Role Series: Attendance (Old)</a>
+                    <a class="navbar-brand visible-xs" id = "title" href="#">Critical Role Series: Attendance</a>
                     <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
@@ -218,8 +218,8 @@ $(document).ready(function(){
       
     
 
-    <h4><a href="/spellbook/critical-role-series-attendance/">Critical Role Series: Attendance (Old)</a></h4>
-    <h5>May 22, 2020 - 7 minutes</h5>
+    <h4><a href="/spellbook/critical-role-series-attendance-2020-11-16/">Critical Role Series: Attendance</a></h4>
+    <h5>November 16, 2020 - 7 minutes</h5>
     <h5></h5>
 
     
@@ -250,10 +250,6 @@ $(document).ready(function(){
     <br> <div class="text-justify">
 
 
-<div id="update" class="section level2">
-<h2>UPDATE</h2>
-<p>Please find an updated version of this post <a href = "/spellbook/critical-role-series-attendance-2020-11-16/">here</a>. When I first made these graphs, I was still early in the storyline of campaign 2. Some aspects of the graphs have now been updated to use characters’ true names.</p>
-</div>
 <div id="spell-ingredients" class="section level2">
 <h2>Spell Ingredients</h2>
 <p>This spell is written in the <code>R</code> language, and requires:</p>
@@ -363,9 +359,9 @@ on the same days starting around episode 25, when they had a baby. Sam and Maris
                  axis.ticks = ggplot2::element_blank(),
                  axis.title.x = ggplot2::element_blank(),
                  axis.title.y = ggplot2::element_blank())</code></pre>
-<p><img src="/spellbook/2020-05-22-critical-role-series-attendance_files/figure-html/simple-plot-1.png" width="672" /></p>
+<p><img src="/spellbook/2020-11-16-critical-role-series-attendance_files/figure-html/simple-plot-1.png" width="672" /></p>
 <p>To really make this pop, though, it would be nice to assign to each actor a color paletter reflective of their
-character. For example, Marisha’s character Beau belongs to the Cobalt Soul and wears blue robes, so a blue palette would be nice for her. Sam’s character Nott is a goblin thief, so a green color palette would work. Each
+character. For example, Marisha’s character Beau belongs to the Cobalt Soul and wears blue robes, so a blue palette would be nice for her. Sam’s character Veth is a cute halfling rogue, so a nice yellow color palette would work. Each
 color palette should have two colors, a dark color for “present” and a light color for “absent”, so 7 actors * 2 values = 14 levels. Actually, Taliesin played two characters, Mollymauk until his death in episode 26, and Caduceus beginning
 in episode 28, so we need 16 levels to assign a different color palette to Taliesin before and after the 26th.</p>
 <p>These are hex codes for colors I thought looked right for each character, in a named vector where each name is one of the actors x attendance possibilities. This will let us use these colors as a palette when we get to the plot.</p>
@@ -376,8 +372,8 @@ in episode 28, so we need 16 levels to assign a different color palette to Talie
     &quot;Marisha1&quot; = as.character(&quot;#072d7f&quot;),
     &quot;Liam0&quot; = as.character(&quot;#f3bea5&quot;),
     &quot;Liam1&quot; = as.character(&quot;#b36817&quot;),
-    &quot;Sam0&quot; = as.character(&quot;#d8dabe&quot;),
-    &quot;Sam1&quot; = as.character(&quot;#525530&quot;),
+    &quot;Sam0&quot; = as.character(&quot;#ffe78f&quot;),
+    &quot;Sam1&quot; = as.character(&quot;#c4a42f&quot;),
     &quot;Laura0&quot; = as.character(&quot;#b8c9e0&quot;),
     &quot;Laura1&quot; = as.character(&quot;#5882b8&quot;),
     &quot;Taliesin0&quot; = as.character(&quot;#cabcdc&quot;),
@@ -389,7 +385,7 @@ in episode 28, so we need 16 levels to assign a different color palette to Talie
 
 discrete_mighty_nein_colors</code></pre>
 <pre><code>##   Travis0   Travis1  Marisha0  Marisha1     Liam0     Liam1      Sam0      Sam1 
-## &quot;#cadabe&quot; &quot;#78a05a&quot; &quot;#9ebbfa&quot; &quot;#072d7f&quot; &quot;#f3bea5&quot; &quot;#b36817&quot; &quot;#d8dabe&quot; &quot;#525530&quot; 
+## &quot;#cadabe&quot; &quot;#78a05a&quot; &quot;#9ebbfa&quot; &quot;#072d7f&quot; &quot;#f3bea5&quot; &quot;#b36817&quot; &quot;#ffe78f&quot; &quot;#c4a42f&quot; 
 ##    Laura0    Laura1 Taliesin0 Taliesin1 Taliesin3 Taliesin4   Ashley0   Ashley1 
 ## &quot;#b8c9e0&quot; &quot;#5882b8&quot; &quot;#cabcdc&quot; &quot;#5b417d&quot; &quot;#dfb9ca&quot; &quot;#c47e9d&quot; &quot;#cccbcd&quot; &quot;#535154&quot;</code></pre>
 <p>We can plot the colors alone, just to get a sense of what they look like.</p>
@@ -406,7 +402,7 @@ discrete_mighty_nein_colors</code></pre>
                  axis.text.y = ggplot2::element_blank(),
                  axis.title.y = ggplot2::element_blank(),
                  legend.position = &quot;none&quot;)</code></pre>
-<p><img src="/spellbook/2020-05-22-critical-role-series-attendance_files/figure-html/test-palette-1.png" width="672" /></p>
+<p><img src="/spellbook/2020-11-16-critical-role-series-attendance_files/figure-html/test-palette-1.png" width="672" /></p>
 <p>You might be wondering why the labels are so flat – e.g. “Taliesin0” and “Taliesin1”, instead of a two-dimensional
 structure that has “Taliesin” in one column and 1 or 0 in the other, like our attendance data already has.</p>
 <p>Well, things gets tricky, because for <code>ggplot2</code> to give each character and their attendance value a different
@@ -449,7 +445,7 @@ head(attendance_data_long_with_factor)</code></pre>
                  axis.ticks = ggplot2::element_blank(),
                  axis.title.x = ggplot2::element_blank(),
                  axis.title.y = ggplot2::element_blank())</code></pre>
-<p><img src="/spellbook/2020-05-22-critical-role-series-attendance_files/figure-html/colorful-plot-1.png" width="672" /></p>
+<p><img src="/spellbook/2020-11-16-critical-role-series-attendance_files/figure-html/colorful-plot-1.png" width="672" /></p>
 </div>
 </div>
 

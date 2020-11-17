@@ -1,8 +1,8 @@
 ---
-title: 'Critical Role Series: Kiri Imitations (Old)'
+title: 'Critical Role Series: Kiri Imitations'
 author: Afton Coombs
-date: '2020-05-24'
-slug: critical-role-series-kiri-imitations
+date: '2020-11-16'
+slug: critical-role-series-kiri-imitations-2020-11-16
 categories:
   - R
   - analysis
@@ -14,9 +14,6 @@ tags:
 ```{r setup, echo = FALSE, message = FALSE, include = FALSE}
 library(magrittr)
 ```
-
-## UPDATE
-Please find an updated version of this post <a href = "/spellbook/critical-role-series-kiri-imitations-2020-11-16/">here</a>. When I first made these graphs, I was still early in the storyline of campaign 2. Some aspects of the graphs have now been updated to use characters' true names.
 
 ## Ingredients
 
@@ -53,7 +50,7 @@ As we can see, the dataset has, per row, the timestamp in the episode, the perso
 imitated speech. For background information -- the rows are in chronological order.
 
 ```{r load-data}
-kiri_data <- read.csv("data/Kiri Imitations.csv",
+kiri_data <- read.csv("data/Kiri Imitations 2020-11-16.csv",
                       stringsAsFactors = FALSE)
 head(kiri_data)
 ```
@@ -75,7 +72,7 @@ kiri_data_m9 <-
                                 "Fjord",
                                 "Jester",
                                 "Molly",
-                                "Nott",
+                                "Veth",
                                 "Yasha"))
 
 kiri_data_m9 <-
@@ -96,7 +93,7 @@ single_mighty_nein_colors <-
   c("Fjord" = as.character("#78a05a"),
     "Beau" = as.character("#072d7f"),
     "Caleb" = as.character("#b36817"),
-    "Nott" = as.character("#525530"),
+    "Veth" = as.character("#c4a42f"),
     "Jester" = as.character("#5882b8"),
     "Molly" = as.character("#5b417d"),
     "Yasha" = as.character("#535154"))

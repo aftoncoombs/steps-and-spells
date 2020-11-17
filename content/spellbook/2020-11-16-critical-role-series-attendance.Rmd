@@ -1,8 +1,8 @@
 ---
-title: 'Critical Role Series: Attendance (Old)'
+title: 'Critical Role Series: Attendance'
 author: Afton Coombs
-date: '2020-05-22'
-slug: critical-role-series-attendance
+date: '2020-11-16'
+slug: critical-role-series-attendance-2020-11-16
 categories:
   - R
   - analysis
@@ -14,9 +14,6 @@ tags:
 ```{r setup, echo = FALSE, include = FALSE, message = FALSE}
 library(magrittr)
 ```
-
-## UPDATE
-Please find an updated version of this post <a href = "/spellbook/critical-role-series-attendance-2020-11-16/">here</a>. When I first made these graphs, I was still early in the storyline of campaign 2. Some aspects of the graphs have now been updated to use characters' true names.
 
 ## Spell Ingredients
 
@@ -123,7 +120,7 @@ ggplot2::ggplot(data = attendance_data_long,
 ```
 
 To really make this pop, though, it would be nice to assign to each actor a color paletter reflective of their
-character. For example, Marisha's character Beau belongs to the Cobalt Soul and wears blue robes, so a blue palette would be nice for her. Sam's character Nott is a goblin thief, so a green color palette would work. Each
+character. For example, Marisha's character Beau belongs to the Cobalt Soul and wears blue robes, so a blue palette would be nice for her. Sam's character Veth is a cute halfling rogue, so a nice yellow color palette would work. Each
 color palette should have two colors, a dark color for "present" and a light color for "absent", so 7 actors * 2 values = 14 levels. Actually, Taliesin played two characters, Mollymauk until his death in episode 26, and Caduceus beginning
 in episode 28, so we need 16 levels to assign a different color palette to Taliesin before and after the 26th.
 
@@ -137,8 +134,8 @@ discrete_mighty_nein_colors <-
     "Marisha1" = as.character("#072d7f"),
     "Liam0" = as.character("#f3bea5"),
     "Liam1" = as.character("#b36817"),
-    "Sam0" = as.character("#d8dabe"),
-    "Sam1" = as.character("#525530"),
+    "Sam0" = as.character("#ffe78f"),
+    "Sam1" = as.character("#c4a42f"),
     "Laura0" = as.character("#b8c9e0"),
     "Laura1" = as.character("#5882b8"),
     "Taliesin0" = as.character("#cabcdc"),
