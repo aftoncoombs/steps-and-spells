@@ -6,30 +6,52 @@
     <description>Recent content on Steps &amp; Spells</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 24 May 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 16 Nov 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Critical Role Series: Kiri Imitations</title>
-      <link>/spellbook/critical-role-series-kiri-imitations/</link>
-      <pubDate>Sun, 24 May 2020 00:00:00 +0000</pubDate>
+      <title>Critical Role Series: Attendance</title>
+      <link>/spellbook/critical-role-series-attendance-2020-11-16/</link>
+      <pubDate>Mon, 16 Nov 2020 00:00:00 +0000</pubDate>
       
-      <guid>/spellbook/critical-role-series-kiri-imitations/</guid>
+      <guid>/spellbook/critical-role-series-attendance-2020-11-16/</guid>
+      <description>Spell Ingredients This spell is written in the R language, and requires:
+ magrittr dplyr tidyr tibble ggplot2 ggthemes   Introduction This is a short exploratory data analysis of attendance on the web series Critical Role, in which voice actors play Dungeons and Dragoooooooons! It is a fantastic show, and some of the amazing people at Crit Role Stats have been tracking “monster stats, dice rolls, and anything else that can be quantified on Critical Role”.</description>
+    </item>
+    
+    <item>
+      <title>Critical Role Series: Kiri Imitations</title>
+      <link>/spellbook/critical-role-series-kiri-imitations-2020-11-16/</link>
+      <pubDate>Mon, 16 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/spellbook/critical-role-series-kiri-imitations-2020-11-16/</guid>
       <description>Ingredients This spell is made in the R language, and requires these packages:
  magrittr dplyr stringr ggplot2   Introduction This is part of a just-for-fun series using data on the Dungeons and Dragons streaming show, Critical Role. The amazing people at Crit Role Stats have logged and analyzed data about various aspects of the show, from dice rolls to character stats to in-game puns.
 The show is on hiatus due to COVID-19 so in the usual timeslot when I would have been watching Critical Role, I’ve been having some fun visualizing some of the data tracked by Crit Role Stats.</description>
     </item>
     
     <item>
-      <title>Critical Role Series: Attendance</title>
+      <title>Critical Role Series: Kiri Imitations (Old)</title>
+      <link>/spellbook/critical-role-series-kiri-imitations/</link>
+      <pubDate>Sun, 24 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/spellbook/critical-role-series-kiri-imitations/</guid>
+      <description>UPDATE Please find an updated version of this post here. When I first made these graphs, I was still early in the storyline of campaign 2. Some aspects of the graphs have now been updated to use characters’ true names.
+ Ingredients This spell is made in the R language, and requires these packages:
+ magrittr dplyr stringr ggplot2   Introduction This is part of a just-for-fun series using data on the Dungeons and Dragons streaming show, Critical Role.</description>
+    </item>
+    
+    <item>
+      <title>Critical Role Series: Attendance (Old)</title>
       <link>/spellbook/critical-role-series-attendance/</link>
       <pubDate>Fri, 22 May 2020 00:00:00 +0000</pubDate>
       
       <guid>/spellbook/critical-role-series-attendance/</guid>
-      <description>Spell Ingredients This spell is written in the R language, and requires:
- magrittr dplyr tidyr tibble ggplot2 ggthemes   Introduction This is a short exploratory data analysis of attendance on the web series Critical Role, in which voice actors play Dungeons and Dragoooooooons! It is a fantastic show, and some of the amazing people at Crit Role Stats have been tracking “monster stats, dice rolls, and anything else that can be quantified on Critical Role”.</description>
+      <description>UPDATE Please find an updated version of this post here. When I first made these graphs, I was still early in the storyline of campaign 2. Some aspects of the graphs have now been updated to use characters’ true names.
+ Spell Ingredients This spell is written in the R language, and requires:
+ magrittr dplyr tidyr tibble ggplot2 ggthemes   Introduction This is a short exploratory data analysis of attendance on the web series Critical Role, in which voice actors play Dungeons and Dragoooooooons!</description>
     </item>
     
     <item>
