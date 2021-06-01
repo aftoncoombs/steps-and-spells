@@ -1,6 +1,0 @@
-"0","frump_forms <-
-  frump_forms %>%
-  dplyr::left_join(img_label)
-"
-"2","Error: `by` required, because the data sources have no common variables
-"

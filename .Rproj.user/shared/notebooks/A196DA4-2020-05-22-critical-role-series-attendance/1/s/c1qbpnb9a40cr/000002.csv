@@ -1,7 +1,0 @@
-"0","attendance_data_long_with_factor <-"
-"0","  attendance_data_long %>%"
-"0","  dplyr::mutate(att_value = ifelse(test = Episode.Num > 27 & Actor == ""Taliesin"","
-"0","                                   yes = paste0(Actor, as.numeric(value) + 2),"
-"0","                                   no = paste0(Actor, value))) %>%"
-"0","  dplyr::mutate(att_value = factor(att_value,"
-"0","                                   levels = names(discrete_mighty_nein_colors)))"

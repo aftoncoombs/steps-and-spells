@@ -1,0 +1,401 @@
+---
+title: Potions Given and Received in Critical Role
+author: Afton Coombs
+date: '2021-02-15'
+slug: critical-role-potions
+categories:
+  - analysis
+  - data visualization
+  - R
+tags:
+  - Critical Role
+---
+
+```{r setup, echo = FALSE, message = FALSE, include = FALSE, warning = FALSE}
+library(magrittr)
+```
+
+## TODOs: update the fonts
+
+## Spell Ingredients
+
+This spell is written in the `R` language, and requires:
+
+- `magrittr`
+- `dplyr`
+- `tibble`
+- `tidygraph`
+- `cowplot`
+
+## Introduction
+This is part of a just-for-fun series using data on the Dungeons and Dragons streaming show, 
+<a href = "https://critrole.com/">Critical Role</a>. The amazing people at <a href = "https://www.critrolestats.com/">Crit Role Stats</a> have logged and analyzed 
+data about various aspects of the show, from dice rolls to character stats to in-game puns. 
+
+This time, I wanted to visualize potions given and received between main characters in the Mighty Nein.
+
+## Background
+
+Characters in the Mighty Nein (the team of adventurers on the show) often give potions to one another in order to heal during a battle. Potion giving and receiving is probably not equal, however, since some
+characters are weaker or have lower hit points, and likely receive more potions in aid from the other characters.
+
+In making this visualization, I set out to make a directed graph where each of the edges is weighted by the number of potions. Let's get started!
+
+## The Data
+
+The dataset comes from <a href = "https://docs.google.com/spreadsheets/d/1aNQxNQH3O_5lucKmAX4qQa5I2jgvI61MxtGq_lOzpas/">Crit Role Stats</a> 
+which I pasted into a .csv file (this is not the most reproducible way to do the data sourcing, but I wanted
+a static dataset in case updates were made, so apologies).
+
+We can see there are columns for `Episode`, which is the episode number and for `Time`, which is the time stamp in the episode. There are columns for `Administered.by` (who gave the potion) and `Administered.To` (who received it) as well as the level of the potion in the `Potion` column and the narrative effect in `Effect`. 
+
+I used only `Administered.by` and `Administered.to` in this analysis. You might be asking, why didn't I use the `Potion` column, since that contains levels of potions such as Regular Healing vs. Greater Healing? Well, I thought that weighting the potions this way would conflate character level with number of potions. As characters level up, and have more gold, they have access to more expensive potions such as Greater or Superior healing. If I weighted the potions by that, I would be counting later character development as "more potions" -- which I don't think should be the case.
+
+```{r load-data}
+potion_data <- 
+  read.csv("data/Potions Consumed - Wildemount.csv",
+           stringsAsFactors = FALSE)
+head(potion_data)
+```
+
+I then filtered the characters to only those that are in the M9. There are guest characters that appear for a few episodes, but since they are only there for short period of time, it doesn't make sense to visualize them against characters there for the whole duration. The weighting of potions given/received would be biased in their cases.
+
+```{r filter-data}
+m9 <- 
+  c("Beau", 
+    "Caduceus", 
+    "Caleb", 
+    "Fjord", 
+    "Jester", 
+    "Molly", 
+    "Veth", 
+    "Yasha")
+
+potion_data <-
+  potion_data %>%
+  dplyr::filter(Administered.To %in% m9) %>%
+  dplyr::filter(Administered.by %in% m9)
+
+table(potion_data$Administered.by, potion_data$Administered.To)
+```
+
+I'm also going to load a potion image which I drew in MS Paint for this purpose. Feel free to use this image for your own. :)
+
+```{r load-potion-image}
+potion_img <- png::readPNG("img/potion.png")
+```
+
+## Plotting
+
+I first created the nodes for the graph and added an id colum, and then created the edges using a count from the `Administered.To` and `Administered.by` columns. Then I did a little renaming to make the columns of the edges dataset `from`, `to`, and `weight`. From there, I just provided the edges and nodes to `tidygraph::tbl_graph()`, while specifying that directed is `TRUE`. This creates a "graph" in the computer science sense, of creating a directed graph, but we don't have an actual visualization yet.
+
+```{r create-directed-graph}
+## Nodes
+potion_nodes <-
+  data.frame(label = 
+               union(potion_data$Administered.by,
+                     potion_data$Administered.To)) %>%
+  tibble::rowid_to_column("id")
+
+## Edges
+potion_edges <- 
+  potion_data %>%
+  dplyr::group_by(Administered.by, Administered.To) %>%
+  dplyr::summarize(weight = dplyr::n()) %>%
+  dplyr::ungroup() %>%
+  dplyr::left_join(potion_nodes, by = c("Administered.by" = "label")) %>% 
+  dplyr::rename(from = id) %>%
+  dplyr::left_join(potion_nodes, by = c("Administered.To" = "label")) %>% 
+  dplyr::rename(to = id) %>%
+  dplyr::select(from, to, weight)
+
+potions_graph <- 
+  tidygraph::tbl_graph(nodes = potion_nodes, 
+                       edges = potion_edges, 
+                       directed = TRUE)
+
+potions_graph
+```
+
+Let's get plotting! I used the `graph` package to create the initial plot, 
+and provided a few arguments to customize the look of it. I specified `layout = "linear"` because I wanted all of the characters lined up horizontally. I also specified arrow and cap sizes throughout.
+
+This gets us a basic directed graph visualization that shows who gave potions to whom. However, it's not yet weighted by the number of potions, and it's not very pretty.
+
+```{r make-initial-graph}
+ggraph::ggraph(potions_graph, layout = "linear") +
+  ggraph::geom_edge_loop(arrow = 
+                           ggplot2::arrow(length = ggplot2::unit(3, 'mm')),
+                         end_cap = ggraph::circle(3, 'mm'),
+                         start_cap = ggraph::circle(3, "mm")) +
+  ggraph::geom_edge_arc(arrow = 
+                          ggplot2::arrow(length = ggplot2::unit(3, 'mm')),
+                        end_cap = ggraph::circle(3, 'mm'),
+                        start_cap = ggraph::circle(3, "mm")) +
+  ggraph::geom_node_text(ggplot2::aes(label = label)) +
+  ggraph::theme_graph()
+```
+
+Let's add a `width` argument which will tell the plotting function that the width of the arrow should come from the `weight` column. I also specified a color, to
+make the arrows red (for the potion color) and I added legend text which specified which thickness corresponds to which number of potions.
+
+This is closer to what we want! There are a few issues, however. Sometimes the
+arrow overlaps with the text of the character's name, and sometimes the head
+of the arrow is obscured to it is difficult to see the direction of the potion-giving.
+
+```{r add-color-and-weight-to-graph, warning = FALSE}
+ggraph::ggraph(potions_graph, layout = "linear") +
+  ggraph::geom_edge_loop(mapping = ggplot2::aes(width = weight),
+                         arrow = 
+                           ggplot2::arrow(length = ggplot2::unit(3, 'mm')),
+                         end_cap = ggraph::circle(3, 'mm'),
+                         start_cap = ggraph::circle(3, "mm"),
+                         color = "red4") +
+  ggraph::geom_edge_arc(mapping = ggplot2::aes(width = weight),
+                        arrow = 
+                          ggplot2::arrow(length = ggplot2::unit(3, 'mm')),
+                        end_cap = ggraph::circle(3, 'mm'),
+                        start_cap = ggraph::circle(3, "mm"),
+                        color = "red4") +
+  ggraph::scale_edge_width(range = c(0.2, 2),
+                           labels = c("one", "two", "three", "four")) +
+  ggraph::geom_node_text(ggplot2::aes(label = label)) +
+  ggraph::theme_graph()
+```
+
+We'll add a white background box to each character text, to prevent the arrow from intruding, and offset some of the arrows in order to prevent the "missing arrowhead" issue.
+
+```{r adjust-alignment-on-graph}
+background_labels <-
+  potion_edges %>%
+  dplyr::left_join(potion_nodes,
+                   by = c("from" = "id")) %>%
+  dplyr::mutate(len = nchar(as.character(label))) %>%
+  dplyr::select(from, to, len)
+
+add_offset <- function(edge_data) {
+  ids <- intersect(edge_data$from, edge_data$to)
+  offset_data <- data.frame(ids = ids, offset = FALSE)
+  
+  for (i in 1:nrow(offset_data)) {
+    edge_data_from <- edge_data[edge_data$from == offset_data$ids[i], ]
+    diff_from <- edge_data_from$to - edge_data_from$from
+
+    ## Check if there are froms less than this to (id)
+    edge_data_to <- edge_data[edge_data$to == offset_data$ids[i], ]
+    diff_to <- edge_data_to$to - edge_data_to$from
+    
+    ## If both conditions satisfied, set the offset to true
+    if (sum(diff_to > 0) >= 1 & sum(diff_from) >= 0) {
+      offset_data$offset[i] <- TRUE
+    }
+  }
+  
+  return(offset_data)
+}
+
+offsets <- 
+  add_offset(potion_edges) %>% 
+  dplyr::filter(offset == TRUE) %>% 
+  dplyr::select(ids)
+
+ggraph::ggraph(potions_graph, layout = "linear") +
+  ggraph::geom_edge_loop(mapping = ggplot2::aes(x = from + 0.15,
+                                                width = weight),
+                         arrow = ggplot2::arrow(length = ggplot2::unit(3, 'mm')),
+                         end_cap = ggraph::circle(3, 'mm'),
+                         start_cap = ggraph::circle(3, "mm"),
+                         alpha = 0.8,
+                         color = "red4") +
+  ggraph::geom_edge_arc(mapping = 
+                          ggplot2::aes(x = ifelse(test = 
+                                                    from %in% offsets$ids,
+                                                  yes = from,
+                                                  no = from - 0.15),
+                                       xend = ifelse(test = 
+                                                       to %in% offsets$ids,
+                                                     yes = to - 0.15,
+                                                     no = to),
+                                       width = weight),
+                        arrow = ggplot2::arrow(length = ggplot2::unit(3, 'mm')),
+                        end_cap = ggraph::circle(3, 'mm'),
+                        start_cap = ggraph::circle(3, "mm"),
+                        alpha = 0.8,
+                        color = "red4") +
+  ggraph::scale_edge_width(range = c(0.2, 2),
+                           labels = c("one", "two", "three", "four")) +
+  ggplot2::geom_rect(ggplot2::aes(xmin = to - len/18, 
+                                  ymin = -0.1,
+                                  xmax = to + len/16,
+                                  ymax = 0.1), 
+                     data = background_labels,
+                     fill = "white") + 
+  ggplot2::labs(edge_width = "Number of Potions Given") +
+  ggraph::geom_node_text(mapping = ggplot2::aes(label = label)) +
+  ggraph::theme_graph()
+```
+
+offsets with the images in order to position them correctly in the legend.
+There remains just one thing to do! Let's replace the arrow icon in the legend with an actual image of the number of potions. This involves a bit of complicated pre-calculating of offsets and image locations. This is worth it, though, to avoid repeating ourselves and adding "magic numbers" with no explanation throughout the code!
+
+I used the `cowplot` library to add the potion images on top. And here we go! A directed graph of potions given and received. We can see that Caleb is pretty weak and received a lot of potions. Veth, Beau, and Yasha each gave themselves a few potions, and Fjord appears to be pretty generous with giving others potions.
+
+```{r adjust-legend-on-graph}
+image_width <- 0.26
+image_height <- 0.4
+space_between_images_h <- 0.05
+space_between_images_v <- 0.25
+image_h_offset <- image_width + space_between_images_h
+image_v_offset <- image_height + space_between_images_v
+image_x <- 7.0
+image_y <- -0.8
+
+arrow_y <- image_y - 0.2
+arrow_length <- 0.25
+arrow_x_end <-  image_x - 0.5
+arrow_x_start <-  image_x - 0.5 - arrow_length
+arrow_v_offset <- 0.25
+
+legend_y = image_y + 0.1
+
+ggraph::ggraph(potions_graph, layout = "linear") +
+  ggraph::geom_edge_loop(mapping = ggplot2::aes(x = from + 0.15,
+                                                width = weight),
+                         arrow = ggplot2::arrow(length = ggplot2::unit(3, 'mm')),
+                         end_cap = ggraph::circle(3, 'mm'),
+                         start_cap = ggraph::circle(3, "mm"),
+                         alpha = 0.8,
+                         color = "red4") +
+  ggraph::geom_edge_arc(mapping = ggplot2::aes(x = ifelse(test = 
+                                                            from %in% offsets$ids,
+                                                          yes = from,
+                                                          no = from - 0.15),
+                                               xend = ifelse(test = 
+                                                               to %in% offsets$ids,
+                                                             yes = to - 0.15,
+                                                             no = to),
+                                               width = weight),
+                        arrow = ggplot2::arrow(length = ggplot2::unit(3, 'mm')),
+                        end_cap = ggraph::circle(3, 'mm'),
+                        start_cap = ggraph::circle(3, "mm"),
+                        alpha = 0.8,
+                        color = "red4") +
+  ggraph::scale_edge_width(range = c(0.2, 2),
+                           labels = c("one", "two", "three", "four")) +
+  ggplot2::geom_rect(ggplot2::aes(xmin = to - len/18, 
+                                  ymin = -0.1,
+                                  xmax = to + len/16,
+                                  ymax = 0.1), 
+                     data = background_labels,
+                     fill = "white") + 
+  ggraph::geom_node_text(mapping = ggplot2::aes(label = label)) +
+  ggplot2::annotate("text",
+                    x = image_x + 0.3,
+                    y = legend_y,
+                    label = "Number of Potions Given") +
+  ggplot2::annotate("segment",
+                    x = arrow_x_start,
+                    xend = arrow_x_end,
+                    y = arrow_y,
+                    yend = arrow_y,
+                    colour = "red4",
+                    size = 0.25,
+                    alpha = 0.8) +
+  ggplot2::annotate("segment",
+                    x = arrow_x_start,
+                    xend = arrow_x_end,
+                    y = arrow_y - 2 * arrow_v_offset,
+                    yend = arrow_y - 2 * arrow_v_offset,
+                    colour = "red4",
+                    size = 1.25,
+                    alpha = 0.8) +
+  ggplot2::annotate("segment",
+                    x = arrow_x_start,
+                    xend = arrow_x_end,
+                    y = arrow_y - 3 *  arrow_v_offset,
+                    yend = arrow_y - 3 * arrow_v_offset,
+                    colour = "red4",
+                    size = 1.75,
+                    alpha = 0.8) +
+  ggplot2::annotate("segment",
+                    x = arrow_x_start,
+                    xend = arrow_x_end,
+                    y = arrow_y - arrow_v_offset,
+                    yend = arrow_y - arrow_v_offset,
+                    colour = "red4",
+                    size = 0.75,
+                    alpha = 0.8) +
+  cowplot::draw_image(potion_img, ## Add first row of potions
+                      x = image_x, 
+                      y = image_y, 
+                      hjust = 1, 
+                      vjust = 1, 
+                      width = image_width, 
+                      height = image_height) +
+  cowplot::draw_image(potion_img, ## Add second row of potions
+                      x = image_x, 
+                      y = image_y - space_between_images_v, 
+                      hjust = 1, 
+                      vjust = 1, 
+                      width = image_width, 
+                      height = image_height) +
+  cowplot::draw_image(potion_img, 
+                      x = image_x + image_h_offset, 
+                      y = image_y - space_between_images_v,
+                      hjust = 1, 
+                      vjust = 1, 
+                      width = image_width, 
+                      height = image_height) +
+  cowplot::draw_image(potion_img, ## Add third row of potions
+                      x = image_x, 
+                      y = image_y - space_between_images_v * 2,
+                      hjust = 1, 
+                      vjust = 1, 
+                      width = image_width, 
+                      height = image_height) +
+  cowplot::draw_image(potion_img, 
+                      x = image_x + image_h_offset, 
+                      y = image_y - space_between_images_v * 2,
+                      hjust = 1, 
+                      vjust = 1, 
+                      width = image_width, 
+                      height = image_height) +
+  cowplot::draw_image(potion_img, 
+                      x = image_x + 2 * image_h_offset, 
+                      y = image_y - space_between_images_v * 2,
+                      hjust = 1, 
+                      vjust = 1, 
+                      width = image_width, 
+                      height = image_height) +
+  cowplot::draw_image(potion_img, ## Add fourth row of potions
+                      x = image_x, 
+                      y = image_y - space_between_images_v * 3,
+                      hjust = 1, 
+                      vjust = 1, 
+                      width = image_width, 
+                      height = image_height) +
+  cowplot::draw_image(potion_img, 
+                      x = image_x + image_h_offset, 
+                      y = image_y - space_between_images_v * 3,
+                      hjust = 1, 
+                      vjust = 1, 
+                      width = image_width, 
+                      height = image_height) +
+  cowplot::draw_image(potion_img, 
+                      x = image_x + 2 * image_h_offset, 
+                      y = image_y - space_between_images_v * 3,
+                      hjust = 1, 
+                      vjust = 1, 
+                      width = image_width, 
+                      height = image_height) +
+  cowplot::draw_image(potion_img, 
+                      x = image_x + 3 * image_h_offset, 
+                      y = image_y - space_between_images_v * 3,
+                      hjust = 1, 
+                      vjust = 1, 
+                      width = image_width, 
+                      height = image_height) +
+  ggraph::theme_graph() +
+  ggplot2::theme(legend.position = "none")
+```
+

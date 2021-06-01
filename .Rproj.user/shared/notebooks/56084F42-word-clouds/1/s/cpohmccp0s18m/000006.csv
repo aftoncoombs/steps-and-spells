@@ -1,5 +1,0 @@
-"0","set.seed(42)"
-"0","ggplot(sending_counts, aes(label = word, size = freq)) +"
-"0","  geom_text_wordcloud() +"
-"0","  scale_size_area(max_size = 90) + "
-"0","  theme_minimal()"
